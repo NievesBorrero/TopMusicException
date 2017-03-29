@@ -4,9 +4,9 @@ import java.util.Calendar;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import topMusicException.excepciones.AutorNoValidoException;
-import topMusicException.excepciones.FechaNoValidaException;
-import topMusicException.excepciones.TituloNoValidoException;
+import topMusicException.excepciones.InvalidAuthorException;
+import topMusicException.excepciones.InvalidYearException;
+import topMusicException.excepciones.InvalidSongException;
 
 public class Cancion {
 	private String title;
@@ -19,8 +19,8 @@ public class Cancion {
 	private static Matcher matcher;
 
 	Cancion(String title, String artist, int year)
-			throws TituloNoValidoException, FechaNoValidaException,
-			AutorNoValidoException {
+			throws InvalidSongException, InvalidYearException,
+			InvalidAuthorException {
 		setTitle(title);
 		setArtist(artist);
 		setYear(year);
@@ -29,10 +29,10 @@ public class Cancion {
 /**
  * 
  * @param year
- * @throws FechaNoValidaException
+ * @throws InvalidYearException
  * 				Si la fecha es inferior a la minima o superior a la actual
  */
-	private void setYear(int year) throws FechaNoValidaException {
+	private void setYear(int year) throws InvalidYearException {
 		checkYear(year);
 		this.year = year;
 
@@ -40,10 +40,10 @@ public class Cancion {
 /**
  * 
  * @param artist
- * @throws AutorNoValidoException
+ * @throws InvalidAuthorException
  * 				Si el valor no coincide con el patron establecido
  */
-	private void setArtist(String artist) throws AutorNoValidoException {
+	private void setArtist(String artist) throws InvalidAuthorException {
 		checkAuthor(artist);
 		this.artist = artist;
 
@@ -51,10 +51,10 @@ public class Cancion {
 /**
  * 
  * @param title
- * @throws TituloNoValidoException
+ * @throws InvalidSongException
  * 				Si el valor no coincide con el patron establecido
  */
-	private void setTitle(String title) throws TituloNoValidoException {
+	private void setTitle(String title) throws InvalidSongException {
 		checkTitle(title);
 		this.title = title;
 
@@ -62,38 +62,38 @@ public class Cancion {
 /**
  * 
  * @param year
- * @throws FechaNoValidaException
+ * @throws InvalidYearException
  * 				Si la fecha es inferior a la minima o superior a la actual
  */
-	static void checkYear(int year) throws FechaNoValidaException {
+	static void checkYear(int year) throws InvalidYearException {
 		if (!(year < THISYEAR && year > 1900))
-			throw new FechaNoValidaException(
+			throw new InvalidYearException(
 					"fecha incorrecta, prueba a introducir una fecha valida");
 
 	}
 /**
  * 
  * @param str
- * @throws AutorNoValidoException
+ * @throws InvalidAuthorException
  * 				Si el valor no coincide con el patron establecido
  */
-	static void checkAuthor(String str) throws AutorNoValidoException {
+	static void checkAuthor(String str) throws InvalidAuthorException {
 		matcher = pattern.matcher(str);
 		if (!matcher.find())
-			throw new AutorNoValidoException(
+			throw new InvalidAuthorException(
 					"titulo no valido, introduce un nombre valido");
 
 	}
 /**
  * 
  * @param str
- * @throws TituloNoValidoException
+ * @throws InvalidSongException
  * 				Si el valor no coincide con el patron establecido
  */
-	static void checkTitle(String str) throws TituloNoValidoException {
+	static void checkTitle(String str) throws InvalidSongException {
 		matcher = pattern.matcher(str);
 		if (!matcher.find())
-			throw new TituloNoValidoException(
+			throw new InvalidSongException(
 					"titulo no valido, introduce un nombre valido");
 
 	}

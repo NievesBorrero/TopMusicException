@@ -1,9 +1,10 @@
 package topMusicException;
 
-import topMusicException.excepciones.AutorNoValidoException;
-import topMusicException.excepciones.FechaNoValidaException;
-import topMusicException.excepciones.PosicionNoValidaException;
-import topMusicException.excepciones.TituloNoValidoException;
+import topMusicException.excepciones.InvalidAuthorException;
+import topMusicException.excepciones.InvalidYearException;
+import topMusicException.excepciones.EmptyListException;
+import topMusicException.excepciones.NoValidPositionException;
+import topMusicException.excepciones.InvalidSongException;
 import utiles.Menu;
 import utiles.Teclado;
 
@@ -17,12 +18,12 @@ public class TestTopMusic {
 
 	/**
 	 * @param args
-	 * @throws TituloNoValidoException
-	 * @throws FechaNoValidaException
-	 * @throws AutorNoValidoException
+	 * @throws InvalidSongException
+	 * @throws InvalidYearException
+	 * @throws InvalidAuthorException
 	 */
-	public static void main(String[] args) throws TituloNoValidoException,
-			FechaNoValidaException, AutorNoValidoException {
+	public static void main(String[] args) throws InvalidSongException,
+			InvalidYearException, InvalidAuthorException {
 		if (Teclado.deseaContinuar("Desea comenzar con lista pregenerada? s-n")) {
 			top.generateTop();
 		}
@@ -31,125 +32,111 @@ public class TestTopMusic {
 				"subir un puesto", "bajar un puesto", "mostrar top music",
 				"mostrar top1", "borrar cancion" });
 		do {
-			switch (menu.gestionar()) {
-			case 1:
-				insert();
-				break;
-			case 2:
-				pushDown();
-				break;
-			case 3:
-				upOne();
-				break;
-			case 4:
-				downOne();
-				break;
-			case 5:
-				showTop();
-				break;
-			case 6:
-				topOne();
-				break;
-			case 7:
-				delete();
-				break;
-			case 8:
-				System.out.println("adioooos");
-				return;
+			try {
+				switch (menu.gestionar()) {
+				case 1:
+					insert();
+					break;
+				case 2:
+					pushDown();
+					break;
+				case 3:
+					upOne();
+					break;
+				case 4:
+					downOne();
+					break;
+				case 5:
+					showTop();
+					break;
+				case 6:
+					topOne();
+					break;
+				case 7:
+					delete();
+					break;
+				case 8:
+					System.out.println("adioooos");
+					return;
+				}
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
 			}
 		} while (menu.getOpcion() < menu.getSALIR());
 	}
 
 	/**
 	 * elimina una cancion si la posicion es valida
+	 * 
+	 * @throws EmptyListException
+	 * @throws NoValidPositionException
 	 */
-	private static void delete() {
-		if (top.isEmpty()) {
-			System.out.println("la lista esta vacia, accion imposible");
-			return;
-		}
-		try {
-			top.delete(Teclado.leerEntero("indica posicion de la cancion a "
-					+ "eliminar") - 1);
-			System.out.println("cancion eliminada");
-		} catch (PosicionNoValidaException e) {
-			System.err.print("\n" + e.getMessage());
-			System.out.println();
-		}
+	private static void delete() throws NoValidPositionException,
+			EmptyListException {
+
+		top.delete(Teclado.leerEntero("indica posicion de la cancion a "
+				+ "eliminar") - 1);
+		System.out.println("cancion eliminada");
 
 	}
 
 	/**
 	 * Saca la cancion del top ten
+	 * 
+	 * @throws EmptyListException
+	 * @throws NoValidPositionException
 	 */
-	private static void pushDown() {
-		if (top.isEmpty()) {
-			System.out.println("la lista est� vac�a, acci�n imposible");
-			return;
-		}
-		try {
-			top.moveDown(Teclado.leerEntero("indica posicion de la cancion a "
-					+ "desplazar") - 1);
-			System.out.println("la cancion ha descendido");
-		} catch (PosicionNoValidaException e) {
-			System.err.print(e.getMessage());
-			System.out.println();
-		}
+	private static void pushDown() throws NoValidPositionException,
+			EmptyListException {
+		top.moveDown(Teclado.leerEntero("indica posicion de la cancion a "
+				+ "desplazar") - 1);
+		System.out.println("la cancion ha descendido");
 
 	}
 
 	/**
 	 * promociona una canción
+	 * 
+	 * @throws EmptyListException
+	 * @throws NoValidPositionException
 	 */
-	private static void upOne() {
-		if (top.isEmpty()) {
-			System.out.println("la lista esta vacia, accion imposible");
-			return;
-		}
-		try {
-			top.upOne(Teclado.leerEntero("indica posicion de la cancion que va"
-					+ " a ascender") - 1);
-			System.out.println("La cancion ha ascendido");
-		} catch (PosicionNoValidaException e) {
-			System.err.print(e.getMessage());
-			System.out.println();
-
-		}
+	private static void upOne() throws NoValidPositionException,
+			EmptyListException {
+		top.upOne(Teclado.leerEntero("indica posicion de la cancion que va"
+				+ " a ascender") - 1);
+		System.out.println("La cancion ha ascendido");
 
 	}
 
 	/**
 	 * desciende una cancion
+	 * 
+	 * @throws EmptyListException
+	 * @throws NoValidPositionException
 	 */
-	private static void downOne() {
-		if (top.isEmpty()) {
-			System.out.println("la lista esta vacia, accion imposible");
-			return;
-		}
-		try {
-			top.downOne(Teclado
-					.leerEntero("indica posicion de la cancion que va"
-							+ " a descender") - 1);
-			System.out.println("la cancion ha descendido");
-		} catch (PosicionNoValidaException e) {
-			System.err.print(e.getMessage());
-			System.out.println();
-		}
-
+	private static void downOne() throws NoValidPositionException,
+			EmptyListException {
+		top.downOne(Teclado.leerEntero("indica posicion de la cancion que va"
+				+ " a descender") - 1);
+		System.out.println("la cancion ha descendido");
 	}
 
 	/**
 	 * muestra las primeras 10 canciones del ranking
+	 * 
+	 * @throws EmptyListException
 	 */
-	private static void showTop() {
+	private static void showTop() throws EmptyListException {
 		System.out.println(top.show());
 
 	}
 
 	/**
 	 * muestra la cancion que ostenta el top one
+	 * 
+	 * @throws EmptyListException
 	 */
-	private static void topOne() {
+	private static void topOne() throws EmptyListException {
 		System.out.println(top.showOne());
 
 	}
@@ -158,26 +145,26 @@ public class TestTopMusic {
 	 * introduce una cancion en la posicion indicada
 	 */
 	private static void insert() {
-		int posicion;
+		int position;
 		try {
 			if (top.isEmpty())
-				posicion = 0;
+				position = 0;
 			else
-				posicion = Teclado.leerEntero("indica posicion") - 1;
-			String titulo = Teclado.leerCadena("titulo:").trim();
-			Cancion.checkTitle(titulo);
+				position = Teclado.leerEntero("indica posicion") - 1;
+			String title = Teclado.leerCadena("titulo:").trim();
+			Cancion.checkTitle(title);
 			// si el titulo no es correcto, salta TituloNoValidoException
-			String artista = Teclado.leerCadena("artista o grupo:").trim();
-			Cancion.checkAuthor(artista);
+			String artist = Teclado.leerCadena("artista o grupo:").trim();
+			Cancion.checkAuthor(artist);
 			// si el artista no es correcto, salta AutorNoValidoException
-			top.insert(posicion, titulo, artista,
+			top.insert(position, title, artist,
 			// Si la posicion no es valida, salta PosicionNoValidaException
 					Teclado.leerEntero("fecha de publicacion:"));
 			// Como la fecha es el ultimo elemento, omitimos el check pues si
 			// falla no hay mas datos que introducir
 			System.out.println("introducida en la posicion indicada");
-		} catch (PosicionNoValidaException | FechaNoValidaException
-				| TituloNoValidoException | AutorNoValidoException e) {
+		} catch (NoValidPositionException | InvalidYearException
+				| InvalidSongException | InvalidAuthorException e) {
 			System.err.print(e.getMessage());
 			System.out.println();
 		}
